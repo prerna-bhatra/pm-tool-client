@@ -3,7 +3,7 @@
   text-align: center;
 }
 
-.nav{
+.nav {
   height: 30px;
 }
 
@@ -42,17 +42,36 @@
 
 /* Projects */
 
-.project-list-body table  .project-name{
+.project-list-body table .project-name {
   list-style: none;
   cursor: pointer;
   color: rgb(0, 102, 255);
 }
 
 /* Project  */
-.project-body{
+.project-body {
   margin: 20px 20px 20px 20px;
-}
-
-.text-left{
   text-align: left;
 }
+
+.text-left {
+  text-align: left;
+}
+
+.task-card {
+  cursor: pointer;
+  max-width: 400px;
+  min-width: 400px;
+  border: 1px solid black;
+  margin: 2px 2px 2px 2px;
+  padding: 5px 5px 5px 5px;
+}
+
+.task-grid{
+  border: 1px solid black;
+  margin: 3px 3px 3px 3px;
+  min-width: 400px;
+  min-height: 600px;
+}
+
+/* style={{"border":"1px solid black", "margin":"3px 3px 3px 3px" , "min-height":"600px" ,"min-width":"400px"}} */

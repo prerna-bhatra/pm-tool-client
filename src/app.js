@@ -8,13 +8,12 @@ import Project from "./containers/project/project";
 const App = () => {
   return (
     <div className="App">
-      <h1>Hornblower Project Managements </h1>
-
       <Router>
         <NavBar />
+        <h1>Hornblower Project Managements </h1>
         <Routes>
-          <Route exact path="/login" element={<Login />} />
           <Route exact path="/" element={<ProjectList />} />
+          <Route exact path="/login" element={<Login />} />
           <Route exact path="/project" element={<Project />} />
         </Routes>
       </Router>

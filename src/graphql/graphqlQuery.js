@@ -30,23 +30,29 @@ const GET_ALL_PROJECTS = gql`
 
 const GET_PROJECT_BY_ID = gql`
   query GetProjectById($id: String) {
-    getProjectById (id: $id) {
-    id
-    name
-    tasks {
+    getProjectById(id: $id) {
       id
       name
-      assignee {
+      tasks {
         id
         name
-        email
+        status
+        category
+        description
+        start
+        end
+        assignee {
+          id
+          name
+          email
+        }
+        assigneedBy {
+          id
+          name
+          email
+        }
       }
-      assigneedBy {
-        id
-        name
-        email
-      }
-    }}
+    }
   }
 `;
 
