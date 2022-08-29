@@ -8,13 +8,17 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
 import { useQuery, gql } from "@apollo/client";
-import { GET_ALL_PROJECTS } from "../../graphql/graphqlQuery";
+import {
+  GET_ALL_PROJECTS,
+  IS_LOGGED_IN_QUERY,
+} from "../../graphql/graphqlQuery";
+import { idVar, isLoggedInVar } from "../../cache";
 
 const ProjectList = () => {
   const navigate = useNavigate();
   const { loading, error, data } = useQuery(GET_ALL_PROJECTS);
 
-  console.log("loading", loading, "errrr", error, "data", data);
+ 
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>error</p>;
@@ -43,9 +47,14 @@ const ProjectList = () => {
         {data &&
           data.getAllProjects.length > 0 &&
           data.getAllProjects.map((item, i) => (
-            <TableRow onClick={() => goToProject(item.id)}>
-              <TableCell className="project-name">{item.name}</TableCell>
-              <TableCell>-</TableCell>
+            <TableRow>
+              <TableCell
+                onClick={() => goToProject(item.id)}
+                className="project-name"
+              >
+                {item.name}
+              </TableCell>
+              <TableCell>{item?.lead?.name}</TableCell>
               <TableCell>-</TableCell>
             </TableRow>
             // <li </li>

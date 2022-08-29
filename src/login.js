@@ -2,17 +2,22 @@
 
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { loginUser } from "./redux/auth/action";
+import { FormControl, InputLabel, Input } from "@material-ui/core";
+
+import { loginSuccess } from "./redux/auth/action";
+import { LOGIN_USER } from "./graphql/graphqlQuery";
+import { isLoggedInVar, idVar, emailVar, nameVar } from "./cache";
+import { useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 
 const Login = ({ dispatch, status, token }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
 
-  const submitLogin = () => {
-    dispatch(loginUser(user));
-  };
+  const [submitLogin, { loading, error }] = useMutation(LOGIN_USER);
 
   const handleChange = (value, field) => {
     const temp = user;
@@ -31,40 +36,62 @@ const Login = ({ dispatch, status, token }) => {
   return (
     <div>
       <h3>Login</h3>
-
       <div>
-        <p>Please use following credentilas</p>
-        email : eve.holt@reqres.in, password: cityslicka
-      </div>
-      <br />
-      <input
-        type="text"
-        value={user.email}
-        placeholder="Email"
-        onChange={(e) => handleChange(e.target.value, "email")}
-      />
-      <input
-        type="password"
-        value={user.password}
-        placeholder="Password"
-        onChange={(e) => handleChange(e.target.value, "password")}
-      />
-      <button onClick={submitLogin}>SUBMIT</button>
-      <button onClick={cancelLogin}>CANCEL</button>
-
-      <div>
-        <p style={{ color: "green" }}>
-          {status === "PENDING" ? "Please wait ..." : ""}
-        </p>
-        <p style={{ color: "red" }}>
-          {status === "ERROR" ? "Login Failed" : ""}
-        </p>
-        <p style={{ color: "green" }}>
-          {status === "SUCCESS" ? "Login successful" : ""}
-        </p>
+        <FormControl>
+          <InputLabel htmlFor="email">Email</InputLabel>
+          <Input
+            onChange={(e) => handleChange(e.target.value, "email")}
+            id="email"
+            value={user.email}
+          />
+        </FormControl>
       </div>
       <div>
-        <p>{token.length ? "Token = " + token : ""}</p>
+        <FormControl>
+          <InputLabel htmlFor="password">Password</InputLabel>
+          <Input
+            onChange={(e) => handleChange(e.target.value, "password")}
+            id="password"
+            value={user.password}
+          />
+        </FormControl>
+      </div>
+      <div>
+        <button
+          onClick={() =>
+            submitLogin({
+              variables: {
+                email: user.email,
+                password: user.password,
+              },
+              onCompleted: (data) => {
+                localStorage.setItem("token", data?.login?.token);
+                const { name, email, id } = data?.login?.data;
+                localStorage.setItem("id", id);
+                localStorage.setItem("name", name);
+                localStorage.setItem("email", email);
+
+                if (data) {
+                  dispatch(
+                    loginSuccess({
+                      payload: data.login,
+                    })
+                  );
+                }
+
+                // isLoggedInVar(true);
+                // idVar(id);
+                // emailVar(email);
+                // nameVar(name);
+
+                navigate("/");
+              },
+            })
+          }
+          // type="submit"
+        >
+          Submit
+        </button>
       </div>
     </div>
   );
